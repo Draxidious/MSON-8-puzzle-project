@@ -1,10 +1,17 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class Board {
     private int[][] board;
+    private int n;
+    private int hamming = -1;
+    private int blankRow = -1;
+    private int blankCol = -1;
 
     public Board(int[][] blocks) {
         board = blocks;
+        n = board.length;
         // construct a board from an n-by-n array of blocks
         // (where blocks[i][j] = block in row i, column j)
     }
@@ -18,6 +25,10 @@ public class Board {
         int count = 0;
         for (int r = 0; r < board.length; r++) {
             for (int c = 0; c < board.length; c++) {
+                if (blankRow == -1 && board[r][c] == 0) {
+                    blankRow = r;
+                    blankCol = c;
+                }
                 if (r == board.length - 1 && c == board.length - 1 && board[r][c] != 0) {
                     count++;
                 } else if (board[r][c] != r * board.length + c + 1) {
@@ -25,6 +36,7 @@ public class Board {
                 }
             }
         }
+        hamming = count;
         return count; // one is out of place
     }
 
@@ -32,10 +44,14 @@ public class Board {
         int man = 0;
         for (int r = 0; r < board.length; r++) {
             for (int c = 0; c < board.length; c++) {
+                if (blankRow == -1 && board[r][c] == 0) {
+                    blankRow = r;
+                    blankCol = c;
+                }
                 int num = board[r][c];
-                if(num!=0){
-                    man += Math.abs(r-((num-1)/board.length));
-                    man += Math.abs(c-(num%board.length-1));
+                if (num != 0) {
+                    man += Math.abs(r - ((num - 1) / board.length));
+                    man += Math.abs(c - (num % board.length - 1));
                 }
             }
         }
@@ -45,11 +61,30 @@ public class Board {
 
     public boolean isGoal() {
         // is this board the goal board?
-        return hamming()==0;
+        if (hamming == -1) hamming = hamming();
+        return hamming == 0;
     }
 
     public Board twin() {
         // a board that is obtained by exchanging any pair of blocks
+        for (int r = 0; r < board.length - 1; r++) {
+            for (int c = 0; c < board.length - 1; c++) {
+                if (board[r][c] != 0 && board[r][c + 1] != 0) {
+                    int[][] twin = Arrays.copyOf(board, board.length);
+                    int temp = twin[r][c];
+                    twin[r][c] = twin[r][c + 1];
+                    twin[r][c + 1] = temp;
+                    return new Board(twin);
+                }
+                if (board[r][c] != 0 && board[r + 1][c] != 0) {
+                    int[][] twin = Arrays.copyOf(board, board.length);
+                    int temp = twin[r][c];
+                    twin[r][c] = twin[r][c + 1];
+                    twin[r][c + 1] = temp;
+                    return new Board(twin);
+                }
+            }
+        }
         return null;
     }
 
@@ -58,24 +93,93 @@ public class Board {
         //if they have the same numbers in the same places
         //cast y to Board
         //arrays.deepEquals works with 1D probs
-        Board comp = (Board) y;
-        return false;
+        if (y == this) return true;
+        if (y == null) return false;
+        if (y.getClass() != this.getClass()) return false;
+        Board compare = (Board) y;
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c < board.length; c++) {
+                if (board[r][c] != compare.board[r][c]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public Iterable<Board> neighbors() {
+        ArrayList<Board> ret = new ArrayList<>();
+        if (blankRow == -1) {
+            boolean leave = false;
+            for (int r = 0; r < board.length; r++) {
+                for (int c = 0; c < board.length; c++) {
+                    if (blankRow == -1 && board[r][c] == 0) {
+                        blankRow = r;
+                        blankCol = c;
+                        leave = true;
+                    }
+                }
+                if (leave) break;
+            }
+
+        }
+        if (inbounds(blankRow + 1, blankCol)) {
+            int[][] twin = Arrays.copyOf(board, board.length);
+            int temp = twin[blankRow][blankCol];
+            twin[blankRow][blankCol] = twin[blankRow + 1][blankCol];
+            twin[blankRow + 1][blankCol] = temp;
+            ret.add(new Board(twin));
+        }
+        if (inbounds(blankRow, blankCol + 1)) {
+            int[][] twin = Arrays.copyOf(board, board.length);
+            int temp = twin[blankRow][blankCol];
+            twin[blankRow][blankCol] = twin[blankRow][blankCol + 1];
+            twin[blankRow][blankCol + 1] = temp;
+            ret.add(new Board(twin));
+        }
+        if (inbounds(blankRow - 1, blankCol)) {
+            int[][] twin = Arrays.copyOf(board, board.length);
+            int temp = twin[blankRow][blankCol];
+            twin[blankRow][blankCol] = twin[blankRow - 1][blankCol];
+            twin[blankRow - 1][blankCol] = temp;
+            ret.add(new Board(twin));
+        }
+        if (inbounds(blankRow, blankCol - 1)) {
+            int[][] twin = Arrays.copyOf(board, board.length);
+            int temp = twin[blankRow][blankCol];
+            twin[blankRow][blankCol] = twin[blankRow][blankCol - 1];
+            twin[blankRow][blankCol - 1] = temp;
+            ret.add(new Board(twin));
+        }
+
         // all neighboring boards
-        return null;
+
+        return ret;
     }
 
+    private boolean inbounds(int row, int col) {
+        return (row >= 0 && row < n && col >= 0 && col < n);
+    }
+
+
     public String toString() {
-        // string representation of this board (in the output format specified below)
-        return null;
+        StringBuilder s = new StringBuilder();
+        s.append(n + "\n");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                s.append(String.format("%2d ", board[i][j]));
+            }
+            s.append("\n");
+        }
+        return s.toString();
     }
 
     public static void main(String[] args) {
         // unit tests (not graded)
-        int[][] blocks = {{1,2,3},{4,5,6}};
+        int[][] blocks = {{0, 2, 3}, {4, 5, 6}};
+        int[][] blocks1 = {{1, 2, 3}, {4, 5, 6}};
         Board b1 = new Board(blocks);
+        b1.neighbors();
 
 
     }

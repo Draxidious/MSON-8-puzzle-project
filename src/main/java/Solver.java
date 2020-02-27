@@ -9,6 +9,7 @@ public class Solver {
     }
     public int moves() {
       // min number of moves to solve initial board; -1 if unsolvable
+        //create a board node class to know where the board came from
       return 0;
     }
     public Iterable<Board> solution() {

@@ -18,7 +18,7 @@ public class BoardTest {
   
   private Board generateBoard(String filename) {
  // create initial board from file
-    In in = new In("8puzzle-test-files/" + filename);
+    In in = new In("8puzzle-test-files/" + filename); // name of file is the min number of moves needed to do it
     int n = in.readInt();
     int[][] blocks = new int[n][n];
     for (int i = 0; i < n; i++)
