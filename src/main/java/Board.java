@@ -67,20 +67,20 @@ public class Board {
 
     public Board twin() {
         // a board that is obtained by exchanging any pair of blocks
-        for (int r = 0; r < board.length - 1; r++) {
-            for (int c = 0; c < board.length - 1; c++) {
-                if (board[r][c] != 0 && board[r][c + 1] != 0) {
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c < board.length; c++) {
+                if (board[r][c] != 0 && inbounds(r, c + 1) && board[r][c + 1] != 0) {
                     int[][] twin = Arrays.copyOf(board, board.length);
                     int temp = twin[r][c];
                     twin[r][c] = twin[r][c + 1];
                     twin[r][c + 1] = temp;
                     return new Board(twin);
                 }
-                if (board[r][c] != 0 && board[r + 1][c] != 0) {
+                if (board[r][c] != 0 && inbounds(r, c + 1) && board[r + 1][c] != 0) {
                     int[][] twin = Arrays.copyOf(board, board.length);
                     int temp = twin[r][c];
-                    twin[r][c] = twin[r][c + 1];
-                    twin[r][c + 1] = temp;
+                    twin[r][c] = twin[r + 1][c];
+                    twin[r + 1][c] = temp;
                     return new Board(twin);
                 }
             }
@@ -113,42 +113,51 @@ public class Board {
             boolean leave = false;
             for (int r = 0; r < board.length; r++) {
                 for (int c = 0; c < board.length; c++) {
-                    if (blankRow == -1 && board[r][c] == 0) {
+                    if (board[r][c] == 0) {
                         blankRow = r;
                         blankCol = c;
                         leave = true;
+                        break;
                     }
                 }
                 if (leave) break;
             }
 
         }
-        if (inbounds(blankRow + 1, blankCol)) {
+        int newRow = blankRow + 1;
+        int newCol = blankCol;
+        if (inbounds(newRow, newCol)) {
             int[][] twin = Arrays.copyOf(board, board.length);
             int temp = twin[blankRow][blankCol];
-            twin[blankRow][blankCol] = twin[blankRow + 1][blankCol];
-            twin[blankRow + 1][blankCol] = temp;
+            twin[blankRow][blankCol] = twin[newRow][newCol];
+            twin[newRow][newCol] = temp;
             ret.add(new Board(twin));
         }
-        if (inbounds(blankRow, blankCol + 1)) {
+        newRow = blankRow;
+        newCol = blankCol + 1;
+        if (inbounds(newRow, newCol)) {
             int[][] twin = Arrays.copyOf(board, board.length);
             int temp = twin[blankRow][blankCol];
-            twin[blankRow][blankCol] = twin[blankRow][blankCol + 1];
-            twin[blankRow][blankCol + 1] = temp;
+            twin[blankRow][blankCol] = twin[newRow][newCol];
+            twin[newRow][newCol] = temp;
             ret.add(new Board(twin));
         }
-        if (inbounds(blankRow - 1, blankCol)) {
+        newRow = blankRow - 1;
+        newCol = blankCol;
+        if (inbounds(newRow, newCol)) {
             int[][] twin = Arrays.copyOf(board, board.length);
             int temp = twin[blankRow][blankCol];
-            twin[blankRow][blankCol] = twin[blankRow - 1][blankCol];
-            twin[blankRow - 1][blankCol] = temp;
+            twin[blankRow][blankCol] = twin[newRow][newCol];
+            twin[newRow][newCol] = temp;
             ret.add(new Board(twin));
         }
-        if (inbounds(blankRow, blankCol - 1)) {
+        newRow = blankRow;
+        newCol = blankCol - 1;
+        if (inbounds(newRow, newCol)) {
             int[][] twin = Arrays.copyOf(board, board.length);
             int temp = twin[blankRow][blankCol];
-            twin[blankRow][blankCol] = twin[blankRow][blankCol - 1];
-            twin[blankRow][blankCol - 1] = temp;
+            twin[blankRow][blankCol] = twin[newRow][newCol];
+            twin[newRow][newCol] = temp;
             ret.add(new Board(twin));
         }
 
