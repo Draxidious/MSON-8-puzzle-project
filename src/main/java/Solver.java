@@ -69,10 +69,12 @@ public class Solver {
                 }
             }
             if (deqnode.isTwin) {
+                System.out.println("twin_route");
                 for (Board board : deqnode.current.twin().neighbors()) {
                     queue.insert(new BoardNode(board, deqnode, true, deqnode.numOfmoves++));
                 }
             } else {
+                System.out.println("non_twin_route");
                 for (Board board : deqnode.current.neighbors()) {
                     queue.insert(new BoardNode(board, deqnode, false, deqnode.numOfmoves++));
                 }
