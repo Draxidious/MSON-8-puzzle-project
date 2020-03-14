@@ -57,6 +57,7 @@ public class Solver {
     }
 
     private int getGoalNode() {
+
         while (true) {
             BoardNode deqnode = queue.delMin();
             if (deqnode.current.isGoal()) {
@@ -68,9 +69,12 @@ public class Solver {
                     return deqnode.numOfmoves;
                 }
             }
+            System.out.println("First gval:" + deqnode.gvalue + " is twin:" + deqnode.isTwin);
+            System.out.println("Second gval:" + queue.delMin().gvalue);
             if (deqnode.isTwin) {
                 System.out.println("twin_route");
                 for (Board board : deqnode.current.twin().neighbors()) {
+                    System.out.println(board);
                     queue.insert(new BoardNode(board, deqnode, true, deqnode.numOfmoves++));
                 }
             } else {
@@ -80,7 +84,9 @@ public class Solver {
                 }
 
             }
+            break;
         }
+        return 0;
         // MAKE SURe your number of moves is not just recording the iterations in which you dequeue
 
         // while your queue is not empty
@@ -97,6 +103,7 @@ public class Solver {
         // repeat for twinQueue( or just stick to one queue)
         // if you dequeue, and its a twin, and its goal state, then its unsolvable,
         // if goal and not twin, then solvable.
+
     }
 
     public boolean isSolvable() {
