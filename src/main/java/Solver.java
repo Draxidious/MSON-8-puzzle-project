@@ -120,7 +120,7 @@ public class Solver {
         if (goalNode != null) {
             BoardNode solNode = goalNode;
             while (solNode.prev != null) { // set a next value in BoardNode class
-                solution.addLast(solNode.current);
+                solution.addFirst(solNode.current);
                 solNode = solNode.prev;
             }
         } else {

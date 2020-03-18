@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Board {
     private int[][] board;
@@ -7,12 +6,11 @@ public class Board {
     private int hamming = -1;
     private int blankRow = -1;
     private int blankCol = -1;
+    private int manhattan = -1;
 
     public Board(int[][] blocks) {
         board = blocks;
         n = board.length;
-        // construct a board from an n-by-n array of blocks
-        // (where blocks[i][j] = block in row i, column j)
     }
 
     public int dimension() {
@@ -53,7 +51,9 @@ public class Board {
 
     public int manhattan() {
         // row*n + col+1 = num it should be
+        if (manhattan != -1) return manhattan;
         int man = 0;
+
         for (int r = 0; r < board.length; r++) {
             for (int c = 0; c < board.length; c++) {
                 if (blankRow == -1 && board[r][c] == 0) {
@@ -117,14 +117,11 @@ public class Board {
     }
 
     public boolean equals(Object y) {
-        // does this board equal y?
-        //if they have the same numbers in the same places
-        //cast y to Board
-        //arrays.deepEquals works with 1D probs
         if (y == this) return true;
         if (y == null) return false;
         if (y.getClass() != this.getClass()) return false;
         Board compare = (Board) y;
+        if (compare.n != n) return false;
         for (int r = 0; r < board.length; r++) {
             for (int c = 0; c < board.length; c++) {
                 if (board[r][c] != compare.board[r][c]) {
