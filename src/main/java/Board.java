@@ -1,11 +1,33 @@
+
 import java.util.ArrayList;
 
+/**
+ * Board class.
+ */
 public class Board {
+    /**
+     * Board 2D Array.
+     */
     private int[][] board;
+    /**
+     * Length and width of array.
+     */
     private int n;
+    /**
+     * Used to reuse hamming value.
+     */
     private int hamming = -1;
+    /**
+     * Row where 0 is.
+     */
     private int blankRow = -1;
+    /**
+     * Column where 0 is.
+     */
     private int blankCol = -1;
+    /**
+     * Used to resuse manhattan value.
+     */
     private int manhattan = -1;
 
     public Board(int[][] blocks) {
@@ -80,6 +102,7 @@ public class Board {
             }
         }
         // sum of Manhattan distances between blocks and goal
+        manhattan = man;
         return man;
     }
 
@@ -149,68 +172,24 @@ public class Board {
             }
 
         }
-
-        int[][] twin = new int[board.length][board.length];
-        for (int r = 0; r < board.length; r++) {
-            for (int c = 0; c < board.length; c++) {
-                twin[r][c] = board[r][c];
+        int[] DX = {1, 0, -1, 0};
+        int[] DY = {0, 1, 0, -1};
+        for (int i = 0; i < 4; i++) {
+            int[][] twin = new int[board.length][board.length];
+            for (int r = 0; r < board.length; r++) {
+                for (int c = 0; c < board.length; c++) {
+                    twin[r][c] = board[r][c];
+                }
+            }
+            int newRow = blankRow + DX[i];
+            int newCol = blankCol + DY[i];
+            if (inbounds(newRow, newCol)) {
+                int temp = twin[blankRow][blankCol];
+                twin[blankRow][blankCol] = twin[newRow][newCol];
+                twin[newRow][newCol] = temp;
+                ret.add(new Board(twin));
             }
         }
-
-        int newRow = blankRow + 1;
-        int newCol = blankCol;
-        if (inbounds(newRow, newCol)) {
-            int temp = twin[blankRow][blankCol];
-            twin[blankRow][blankCol] = twin[newRow][newCol];
-            twin[newRow][newCol] = temp;
-            ret.add(new Board(twin));
-        }
-
-        int[][] twin1 = new int[board.length][board.length];
-        for (int r = 0; r < board.length; r++) {
-            for (int c = 0; c < board.length; c++) {
-                twin1[r][c] = board[r][c];
-            }
-        }
-
-        newRow = blankRow;
-        newCol = blankCol + 1;
-        if (inbounds(newRow, newCol)) {
-            int temp = twin1[blankRow][blankCol];
-            twin1[blankRow][blankCol] = twin1[newRow][newCol];
-            twin1[newRow][newCol] = temp;
-            ret.add(new Board(twin1));
-        }
-
-        int[][] twin2 = new int[board.length][board.length];
-        for (int r = 0; r < board.length; r++) {
-            for (int c = 0; c < board.length; c++) {
-                twin2[r][c] = board[r][c];
-            }
-        }
-        newRow = blankRow - 1;
-        newCol = blankCol;
-        if (inbounds(newRow, newCol)) {
-            int temp = twin2[blankRow][blankCol];
-            twin2[blankRow][blankCol] = twin2[newRow][newCol];
-            twin2[newRow][newCol] = temp;
-            ret.add(new Board(twin2));
-        }
-        int[][] twin3 = new int[board.length][board.length];
-        for (int r = 0; r < board.length; r++) {
-            for (int c = 0; c < board.length; c++) {
-                twin3[r][c] = board[r][c];
-            }
-        }
-        newRow = blankRow;
-        newCol = blankCol - 1;
-        if (inbounds(newRow, newCol)) {
-            int temp = twin3[blankRow][blankCol];
-            twin3[blankRow][blankCol] = twin3[newRow][newCol];
-            twin3[newRow][newCol] = temp;
-            ret.add(new Board(twin3));
-        }
-
 
         // all neighboring boards
 

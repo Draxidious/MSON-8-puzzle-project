@@ -1,18 +1,35 @@
-import edu.princeton.cs.algs4.MinPQ;
 
+import edu.princeton.cs.algs4.MinPQ;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-
+/**
+ * Solver class to solve boards.
+ */
 public class Solver {
+    /**
+     * Node class to store boards in q.
+     */
     private class BoardNode implements Comparable<BoardNode> {
         /**
          * Gvalue = Moves +manhattan.
          */
         private int gvalue;
+        /**
+         * Number of moves relative to this node.
+         */
         private int numOfmoves;
+        /**
+         * Current board.
+         */
         private Board current;
+        /**
+         * Previous Board.
+         */
         private BoardNode prev;
+        /**
+         * Boolean to check if Twin.
+         */
         private boolean isTwin;
 
         public BoardNode(Board c, BoardNode p, boolean iT, int moves) {
@@ -43,9 +60,21 @@ public class Solver {
         }
     }
 
+    /**
+     * Solution Deque.
+     */
     private Deque<Board> solution;
+    /**
+     * Queue for solving.
+     */
     private MinPQ<BoardNode> queue;
+    /**
+     * End Goal node.
+     */
     private BoardNode goalNode;
+    /**
+     * Number of moves taken to get to solution.
+     */
     private int nummoves;
 
     public Solver(Board initial) {
@@ -87,24 +116,6 @@ public class Solver {
                 }
             }
         }
-
-        // MAKE SURe your number of moves is not just recording the iterations in which you dequeue
-
-        // while your queue is not empty
-        // Dequeu from queue
-        // check if its the goal state(if true, return the dequed BN)
-        // add it's neighbors to the queue
-        // create BoardNodes for each neighbor
-        //(current: the nieghbor, prev: dequed BN(Board node), isTwin: dequeed BN, gValue:
-        // important to grab the number of moves from your dequeued node to calculate the current num of moves
-
-
-        // know if it's a twin or not
-        // previous for neighbors is board you came from, to get a solution, keep calling previous until it is null.
-        // repeat for twinQueue( or just stick to one queue)
-        // if you dequeue, and its a twin, and its goal state, then its unsolvable,
-        // if goal and not twin, then solvable.
-
     }
 
     public boolean isSolvable() {
