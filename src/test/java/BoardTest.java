@@ -39,7 +39,9 @@ public class BoardTest {
 
     @Test
     public void testDimension() {
-        //fail("Not yet implemented");
+        int[][] arr = {{0, 1, 3}, {4, 2, 5}, {7, 8, 6}};
+        Board b = new Board(arr);
+        assertEquals(3, b.dimension());
     }
 
     @Test
@@ -47,12 +49,12 @@ public class BoardTest {
         int[][] arr = {{0, 1, 3}, {4, 2, 5}, {7, 8, 6}};
         Board b = new Board(arr);
         Solver solver = new Solver(b);
-
+        System.out.println(solver.solution());
     }
 
     @Test
     public void testSelectFile() {
-        generateBoard("puzzle4x4-32.txt");
+        generateBoard("puzzle03.txt");
     }
 
     @Test
@@ -79,20 +81,7 @@ public class BoardTest {
         }
     }
 
-    @Test
-    public void test4x4()//handles bulk
-    {
-        String s1 = "puzzle4x4-0";
-        String s2 = "puzzle4x4-";
-        for (int i = 0; i <= 50; i++) {
-            if (i > 9) {
-                generateBoard(s2 + i + ".txt");
-            } else {
-                generateBoard(s1 + i + ".txt");
-            }
 
-        }
-    }
 
     @Test
     public void testMan_Ham() {
@@ -103,14 +92,6 @@ public class BoardTest {
 
     }
 
-    @Test
-    public void hamming() {
 
-    }
-
-    @Test
-    public void testSegments() {
-        //fail("Not yet implemented");
-    }
 
 }
