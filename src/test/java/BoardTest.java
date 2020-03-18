@@ -14,7 +14,7 @@ public class BoardTest {
 
     @Before
     public void setUp() throws Exception {
-        board = generateBoard("puzzle01.txt");
+         board = generateBoard("puzzle01.txt");
     }
 
     private Board generateBoard(String filename) {
@@ -48,6 +48,23 @@ public class BoardTest {
 
     @Test
     public void testSolve() {
+        int[][] arr = {{0, 1, 3},{4, 2, 5},{7, 8, 6}};
+        Board b = new Board(arr);
+        Solver solver = new Solver(b);
+
+    }
+
+    @Test
+    public void testMan_Ham() {
+        int[][] arr = {{8, 1, 3},{4, 0, 2},{7, 6, 5}};
+        Board b = new Board(arr);
+        System.out.println("ham:"+b.hamming());
+        System.out.println("man:"+b.manhattan());
+
+    }
+
+    @Test
+    public void hamming() {
 
     }
 

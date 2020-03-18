@@ -28,18 +28,31 @@ public class Board {
                     blankRow = r;
                     blankCol = c;
                 }
-                if (r == board.length - 1 && c == board.length - 1 && board[r][c] != 0) {
-                    count++;
-                } else if (board[r][c] != r * board.length + c + 1) {
-                    count++;
+                int num = board[r][c];
+                if (num != 0) {
+                    int corcol;
+                    int corrow;
+                    if (num > n) {
+                        if (num % n == 0) {
+                            corcol = n - 1;
+                        } else {
+                            corcol = (num % n) - 1;
+                        }
+
+                    } else {
+                        corcol = num - 1;
+                    }
+                    corrow = (num - 1) / n;
+                    if (corrow != r || corcol != c) count++;
                 }
             }
         }
         hamming = count;
-        return count; // one is out of place
+        return count;
     }
 
     public int manhattan() {
+        // row*n + col+1 = num it should be
         int man = 0;
         for (int r = 0; r < board.length; r++) {
             for (int c = 0; c < board.length; c++) {
@@ -49,8 +62,20 @@ public class Board {
                 }
                 int num = board[r][c];
                 if (num != 0) {
-                    man += Math.abs(r - ((num - 1) / board.length));
-                    man += Math.abs(c - (num % board.length - 1));
+                    int corcol;
+                    int corrow;
+                    if (num > n) {
+                        if (num % n == 0) {
+                            corcol = n - 1;
+                        } else {
+                            corcol = (num % n) - 1;
+                        }
+
+                    } else {
+                        corcol = num - 1;
+                    }
+                    corrow = (num - 1) / n;
+                    man += Math.abs((corrow - r)) + Math.abs(corcol - c);
                 }
             }
         }
@@ -184,8 +209,6 @@ public class Board {
             twin3[newRow][newCol] = temp;
             ret.add(new Board(twin3));
         }
-
-
 
 
         // all neighboring boards
