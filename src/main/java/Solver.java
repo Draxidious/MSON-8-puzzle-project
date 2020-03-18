@@ -119,7 +119,7 @@ public class Solver {
     public Iterable<Board> solution() {
         if (goalNode != null) {
             BoardNode solNode = goalNode;
-            while (solNode.prev != null) { // set a next value in BoardNode class
+            while (solNode != null) { // set a next value in BoardNode class
                 solution.addFirst(solNode.current);
                 solNode = solNode.prev;
             }
