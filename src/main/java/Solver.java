@@ -6,6 +6,9 @@ import java.util.Deque;
 
 public class Solver {
     private class BoardNode implements Comparable<BoardNode> {
+        /**
+         * Gvalue = Moves +manhattan.
+         */
         private int gvalue;
         private int numOfmoves;
         private Board current;
@@ -52,19 +55,14 @@ public class Solver {
         queue = new MinPQ<>();
         solution = new ArrayDeque<>();
         queue.insert(new BoardNode(initial, null, false, 0));
-        // queue.insert(new BoardNode(initial.twin(), null, true, 0));
+        queue.insert(new BoardNode(initial.twin(), null, true, 0));
         nummoves = getGoalNode();
     }
 
     private int getGoalNode() {
-        int count = 2;
         while (true) {
 
             BoardNode deqnode = queue.delMin();
-            System.out.println("CURRENT");
-            System.out.println(deqnode.current);
-            System.out.println("man =" + deqnode.current.manhattan());
-            System.out.println("moves =" + deqnode.numOfmoves);
             if (deqnode.current.isGoal()) {
                 if (deqnode.isTwin) {
                     goalNode = null;
@@ -74,29 +72,20 @@ public class Solver {
                     return deqnode.numOfmoves;
                 }
             }
-            System.out.println("NEXT BOARDS");
             if (deqnode.isTwin) {
-                System.out.println("TWIN");
+
                 for (Board board : deqnode.current.neighbors()) {
                     if (deqnode.prev == null || !board.equals(deqnode.prev.current)) {
-                        System.out.println(board);
-                        System.out.println("man =" + board.manhattan());
-                        System.out.println("moves =" + deqnode.numOfmoves+1);
                         queue.insert(new BoardNode(board, deqnode, true, deqnode.numOfmoves + 1));
                     }
                 }
             } else {
-                System.out.println("NORMAL");
                 for (Board board : deqnode.current.neighbors()) {
                     if (deqnode.prev == null || !board.equals(deqnode.prev.current)) {
-                        System.out.println(board);
-                        System.out.println("man =" + board.manhattan());
-                        System.out.println("moves =" + deqnode.numOfmoves+1);
                         queue.insert(new BoardNode(board, deqnode, false, deqnode.numOfmoves + 1));
                     }
                 }
             }
-
         }
 
         // MAKE SURe your number of moves is not just recording the iterations in which you dequeue

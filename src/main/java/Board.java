@@ -91,17 +91,21 @@ public class Board {
 
     public Board twin() {
         // a board that is obtained by exchanging any pair of blocks
+        int[][] twin = new int[board.length][board.length];
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c < board.length; c++) {
+                twin[r][c] = board[r][c];
+            }
+        }
         for (int r = 0; r < board.length; r++) {
             for (int c = 0; c < board.length; c++) {
                 if (board[r][c] != 0 && inbounds(r, c + 1) && board[r][c + 1] != 0) {
-                    int[][] twin = Arrays.copyOf(board, board.length);
                     int temp = twin[r][c];
                     twin[r][c] = twin[r][c + 1];
                     twin[r][c + 1] = temp;
                     return new Board(twin);
                 }
                 if (board[r][c] != 0 && inbounds(r + 1, c) && board[r + 1][c] != 0) {
-                    int[][] twin = Arrays.copyOf(board, board.length);
                     int temp = twin[r][c];
                     twin[r][c] = twin[r + 1][c];
                     twin[r + 1][c] = temp;
